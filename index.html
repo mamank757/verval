@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORM 12 VERVAL - UREA NPK ORGANIK</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* EDITOR STYLE */
+        body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; padding-bottom: 50px; }
+        .editor-card { background: #1e293b; border: 1px solid #334155; padding: 25px; border-radius: 12px; margin-bottom: 30px; }
+        .input-field { background: #0f172a; border: 1px solid #475569; color: white; padding: 10px; border-radius: 6px; width: 100%; font-size: 13px; outline: none; }
+        .label-title { font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; display: block; }
+
+        /* PRINT FORMAT F4 */
+        #doc-content {
+            background: white;
+            color: black;
+            width: 215mm;
+            margin: 0 auto;
+            padding: 15mm 15mm 15mm 25mm;
+            font-family: 'Times New Roman', Times, serif;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+        }
+
+        .header-title { text-align: center; margin-bottom: 25px; }
+        .header-title h1 { font-size: 14pt; font-weight: bold; text-decoration: underline; text-transform: uppercase; margin: 0; }
+        .header-title h2 { font-size: 12pt; font-weight: bold; text-transform: uppercase; margin: 5px 0 0 0; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid black; }
+        th, td { border: 1px solid black; padding: 4px 8px; font-size: 11pt; vertical-align: middle; color: black; line-height: 1.2; }
+        
+        .no-border, .no-border tr, .no-border td { border: none !important; padding: 2px 0; vertical-align: top; }
+        .section-title { font-weight: bold; font-style: italic; margin-bottom: 5px; display: block; font-size: 11pt; }
+
+        .ttd-wrapper { margin-top: 30px; float: right; width: 280px; text-align: center; position: relative; }
+        #sig-preview { display: none; width: 130px; position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 5; mix-blend-mode: multiply; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .no-print { display: none !important; }
+            #doc-content { margin: 0 !important; padding: 0 !important; width: 100% !important; box-shadow: none !important; }
+            @page { size: 215mm 330mm; margin: 15mm 15mm 15mm 25mm; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="max-w-5xl mx-auto py-10 px-4 no-print">
+    <div class="editor-card shadow-2xl">
+        <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-6">
+            <h2 class="text-xl font-bold text-blue-400 uppercase">Laporan Form 12 VERVAL PUPUK BERSUBSIDI</h2>
+           
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div>
+        <label class="label-title">Nama Penyuluh</label>
+        <input type="text" id="in_nama" oninput="update()" class="input-field" placeholder="Abdul Rahman, SP">
+    </div>
+    <div>
+        <label class="label-title">NIP</label>
+        <input type="text" id="in_nip" oninput="update()" class="input-field" placeholder="19XXXXXXXXXXXXXX">
+    </div>
+
+    <div>
+        <label class="label-title">Pangkat / Golongan</label>
+        <select id="in_pangkat" onchange="update()" class="input-field">
+            <option value="">-- Pilih Pangkat --</option>
+           <option value="Pengatur Muda (II/a)">Pengatur Muda (II/a)</option>
+                    <option value="Pengatur Muda Tk. I (II/b)">Pengatur Muda Tk. I (II/b)</option>
+                    <option value="Pengatur (II/c)">Pengatur (II/c)</option>
+                    <option value="Pengatur Tk. I (II/d)">Pengatur Tk. I (II/d)</option>
+                    <option value="Penata Muda, III/a">Penata Muda, III/a</option>
+                    <option value="Penata Muda Tk. I, III/b">Penata Muda Tk. I, III/b</option>
+                    <option value="Penata, III/c">Penata, III/c</option>
+                    <option value="Penata Tk. I, III/d">Penata Tk. I, III/d</option>
+                    <option value="Pembina (IV/a)">Pembina (IV/a)</option>
+                    <option value="Pembina Tk. I (IV/b)">Pembina Tk. I (IV/b)</option>
+                    <option value="Pembina Utama Muda (IV/c)">Pembina Utama Muda (IV/c)</option>
+                    <option value="Pembina Utama Madya (IV/d)">Pembina Utama Madya (IV/d)</option>
+                    <option value="Pembina Utama (IV/e)">Pembina Utama (IV/e)</option>
+                </select>
+    </div>
+
+    <div>
+        <label class="label-title">Jabatan</label>
+        <select id="in_jabatan" onchange="update()" class="input-field">
+            <option value="">-- Pilih Jabatan --</option>
+           <option value="Penyuluh Pertanian Pemula">Penyuluh Pertanian Pemula</option>
+                        <option value="Penyuluh Pertanian Terampil">Penyuluh Pertanian Terampil</option>
+                        <option value="Penyuluh Pertanian Mahir">Penyuluh Pertanian Mahir</option>
+                        <option value="Penyuluh Pertanian Penyelia">Penyuluh Pertanian Penyelia</option>
+                        <option value="Penyuluh Pertanian Ahli Pertama">Penyuluh Pertanian Ahli Pertama</option>
+                        <option value="Penyuluh Pertanian Ahli Muda">Penyuluh Pertanian Ahli Muda</option>
+                        <option value="Penyuluh Pertanian Ahli Madya">Penyuluh Pertanian Ahli Madya</option>
+                        <option value="Penyuluh Pertanian Ahli Utama">Penyuluh Pertanian Ahli Utama</option>
+                </select>
+    </div>
+
+       
+            <div><label class="label-title">Wilayah Binaan</label><input type="text" id="in_wkpp" oninput="update()" class="input-field"></div>
+            <div><label class="label-title">Periode Laporan</label><input type="text" id="in_periode" oninput="update()" class="input-field" placeholder="Maret 2026"></div>
+        </div>
+
+        <div id="row-input-container" class="space-y-2 border-t border-slate-700 pt-4 mb-4">
+            <label class="label-title text-blue-400">I. Daftar Pengecer & Realisasi (Kg)</label>
+            <div class="row-entry flex flex-wrap gap-2 bg-slate-800 p-3 rounded-lg border border-slate-700">
+                <input type="text" placeholder="Nama Kios" oninput="update()" class="k-nama input-field flex-1 min-w-[150px]">
+                <input type="number" placeholder="Urea" oninput="update()" class="k-urea input-field w-20">
+                <input type="number" placeholder="NPK" oninput="update()" class="k-npk input-field w-20">
+                <input type="number" placeholder="Organik" oninput="update()" class="k-organik input-field w-20">
+                <input type="text" placeholder="Keterangan" oninput="update()" class="k-ket input-field flex-1 min-w-[150px]">
+            </div>
+        </div>
+        <button onclick="addRow()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded font-bold uppercase mb-6">+ Tambah Pengecer</button>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-slate-700 pt-4 mb-6">
+            <div class="col-span-3"><label class="label-title text-blue-400">II. Status Verifikasi (3 Poin)</label></div>
+            <div><label class="label-title">1. Dokumen</label><select id="in_v1" onchange="update()" class="input-field"><option>Sesuai</option><option>Tidak Sesuai</option></select></div>
+            <div><label class="label-title">2. e-RDKK</label><select id="in_v2" onchange="update()" class="input-field"><option>Sesuai</option><option>Tidak Sesuai</option></select></div>
+            <div><label class="label-title">3. Rekapitulasi</label><select id="in_v3" onchange="update()" class="input-field"><option>Sesuai</option><option value="Terdapat Selisih">Tidak Sesuai</option></select></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-slate-700 pt-4">
+            <div><label class="label-title">Upload Tanda Tangan</label><input type="file" accept="image/*" onchange="loadSig(event)" class="input-field text-xs"></div>
+            <div class="grid grid-cols-2 gap-2">
+                <input type="text" id="in_tempat" oninput="update()" placeholder="Kecamatan" class="input-field">
+                <input type="date" id="in_tgl" onchange="update()" class="input-field">
+            </div> </div>
+        </div>
+ <div class="flex gap-2">
+                <button onclick="generateAI()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase transition">AI Narasi</button>
+                <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase transition">Cetak ke PDF</button>
+            </div>
+        <div class="mt-4">
+            <label class="label-title text-blue-400">III. Narasi Permasalahan</label>
+            <textarea id="in_tindak" rows="3" oninput="update()" class="input-field w-full h-24" placeholder="Klik AI untuk narasi..."></textarea>
+        </div>
+    </div>
+</div>
+
+<div id="doc-content">
+    <div class="header-title">
+        <h1>LAPORAN PELAKSANAAAN</h1>
+        <h2>VERIFIKASI DAN VALIDASI DISTRIBUSI PUPUK SUBSIDI</h2>
+    </div>
+
+    <table class="no-border">
+        <tr><td width="30%">Nama / NIP</td><td>: <span id="out_nama_nip" style="font-weight: bold;">-</span></td></tr>
+        <tr><td>Pangkat / Golongan</td><td>: <span id="out_pangkat">-</span></td></tr>
+        <tr><td>Jabatan</td><td>: <span id="out_jabatan">-</span></td></tr>
+        <tr><td>Wilayah Binaan</td><td>: <span id="out_wkpp">-</span></td></tr>
+        <tr><td>Periode Laporan</td><td>: <span id="out_periode">-</span></td></tr>
+    </table>
+
+    <span class="section-title">I. Hasil Kegiatan:</span>
+    <table>
+        <thead>
+            <tr style="background:#f3f4f6;">
+                <th width="5%">No</th>
+                <th width="35%">Pengecer / PPTS</th>
+                <th width="20%">Jenis Pupuk</th>
+                <th width="15%">Realisasi (Kg)</th>
+                <th width="25%">Keterangan</th>
+            </tr>
+        </thead>
+        <tbody id="out_tabel_I"></tbody>
+    </table>
+
+    <span class="section-title">II. Hasil Verifikasi dan Validasi:</span>
+    <table>
+        <thead><tr style="background:#f3f4f6;"><th>No</th><th width="65%">Uraian Kegiatan</th><th>Hasil</th></tr></thead>
+        <tbody>
+            <tr><td align="center">1</td><td>Pemeriksaan dokumen penyaluran tingkat pengecer</td><td align="center" id="out_v1">Sesuai</td></tr>
+            <tr><td align="center">2</td><td>Validasi kesesuaian data penyaluran dengan e-RDKK</td><td align="center" id="out_v2">Sesuai</td></tr>
+            <tr><td align="center">3</td><td>Rekapitulasi hasil verifikasi dan validasi</td><td align="center" id="out_v3" >Sesuai</td></tr>
+        </tbody>
+    </table>
+
+    <span class="section-title">III. Permasalahan dan Tindak Lanjut:</span>
+    <div id="out_tindak" style="border: 1px solid black; padding: 10px; min-height: 100px; text-align: justify; font-size: 11pt;"></div>
+
+    <div class="ttd-wrapper">
+        <p><span id="out_tempat">-</span>, <span id="out_tgl">-</span></p>
+        <p style="margin-bottom: 75px;">Penyuluh Pertanian,</p>
+        <img id="sig-preview" src="">
+        <p style="font-weight: bold; text-decoration: underline;" id="out_nama_ttd">-</p>
+        <p id="out_nip_ttd">-</p>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+
+<script>
+function loadSig(e) {
+    const r = new FileReader();
+    r.onload = () => { const o = document.getElementById('sig-preview'); o.src = r.result; o.style.display = 'block'; };
+    r.readAsDataURL(e.target.files[0]);
+}
+
+function update() {
+    const nm = document.getElementById('in_nama').value;
+    const nip = document.getElementById('in_nip').value;
+    
+    document.getElementById('out_nama_nip').innerText = (nm || "-") + " / " + (nip || "-");
+    document.getElementById('out_pangkat').innerText = document.getElementById('in_pangkat').value || "-";
+    document.getElementById('out_jabatan').innerText = document.getElementById('in_jabatan').value || "-";
+    document.getElementById('out_wkpp').innerText = document.getElementById('in_wkpp').value || "-";
+    document.getElementById('out_periode').innerText = document.getElementById('in_periode').value || "-";
+    
+    document.getElementById('out_v1').innerText = document.getElementById('in_v1').value;
+    document.getElementById('out_v2').innerText = document.getElementById('in_v2').value;
+    document.getElementById('out_v3').innerText = document.getElementById('in_v3').value;
+    
+    document.getElementById('out_tindak').innerText = document.getElementById('in_tindak').value;
+    document.getElementById('out_tempat').innerText = document.getElementById('in_tempat').value || "Bola";
+    document.getElementById('out_nama_ttd').innerText = nm || "-";
+    document.getElementById('out_nip_ttd').innerText = nip ? "NIP. " + nip : "";
+
+    const t = document.getElementById('in_tgl').value;
+    if(t) {
+        const d = new Date(t);
+        document.getElementById('out_tgl').innerText = d.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+    }
+
+    const tb = document.getElementById('out_tabel_I');
+    tb.innerHTML = "";
+    document.querySelectorAll('.row-entry').forEach((r, i) => {
+        const kn = r.querySelector('.k-nama').value || "-";
+        const ku = r.querySelector('.k-urea').value || "0";
+        const knpk = r.querySelector('.k-npk').value || "0";
+        const korg = r.querySelector('.k-organik').value || "0";
+        const kt = r.querySelector('.k-ket').value || "-";
+        
+        tb.innerHTML += `
+            <tr>
+                <td align="center" rowspan="3">${i+1}</td>
+                <td rowspan="3">${kn}</td>
+                <td align="center">Urea</td>
+                <td align="center">${ku}</td>
+                <td rowspan="3">${kt}</td>
+            </tr>
+            <tr>
+                <td align="center">NPK</td>
+                <td align="center">${knpk}</td>
+            </tr>
+            <tr>
+                <td align="center">Organik</td>
+                <td align="center">${korg}</td>
+            </tr>
+        `;
+    });
+}
+
+function addRow() {
+    const div = document.createElement('div');
+    div.className = "row-entry flex flex-wrap gap-2 bg-slate-800 p-3 rounded-lg border border-slate-700 mt-2";
+    div.innerHTML = `
+        <input type="text" placeholder="Nama Kios" oninput="update()" class="k-nama input-field flex-1 min-w-[150px]">
+        <input type="number" placeholder="Urea" oninput="update()" class="k-urea input-field w-20">
+        <input type="number" placeholder="NPK" oninput="update()" class="k-npk input-field w-20">
+        <input type="number" placeholder="Organik" oninput="update()" class="k-organik input-field w-20">
+        <input type="text" placeholder="Keterangan" oninput="update()" class="k-ket input-field flex-1 min-w-[150px]">
+    `;
+    document.getElementById('row-input-container').appendChild(div);
+}
+
+async function generateAI() {
+    const key = "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"; 
+    
+    const v3 = document.getElementById('in_v3').value;
+    const wkpp = document.getElementById('in_wkpp').value || "wilayah binaan";
+    const target = document.getElementById('in_tindak');
+
+    if(!key || key.length < 20) {
+        return alert("API Key tidak valid!");
+    }
+
+    target.value = "Sedang menyusun narasi laporan...";
+
+    try {
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${key}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                model: "llama-3.1-8b-instant",
+                messages: [{
+                    role: "user",
+                   content: `Tuliskan narasi formal singkat (maksimal 2 kalimat) untuk bagian "Permasalahan dan Tindak Lanjut" pada laporan verifikasi dan validasi distribusi pupuk subsidi (urea, NPK, dan organik). Hasil verifikasi adalah: ${v3}, berlokasi di ${wkpp}. Fokus pada penyaluran pupuk, kesesuaian data e-RDKK, dan pengecer. Gunakan bahasa Indonesia yang baku dan profesional.`
+                }]
+            })
+        });
+
+        if (!res.ok) {
+            const err = await res.text();
+            throw new Error(err);
+        }
+
+        const d = await res.json();
+
+        target.value = d.choices?.[0]?.message?.content || "Tidak ada respon dari AI.";
+        update();
+
+    } catch(e) {
+        console.error(e);
+        target.value = "Error: " + e.message;
+    }
+}
+window.onload = update;
+</script>
+</body>
+</html>
