@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FORM 12 VERVAL - UREA NPK ORGANIK</title>
+    <title>FORM 12 VERVAL - PUPUK BERSUBSIDI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+    
+    /* Animasi Loading & Pulse */
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.animate-spin-custom { display: inline-block; animation: spin 1s linear infinite; }
+.pulse-loading { animation: pulse 1.5s infinite; opacity: 0.8; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+
+/* Badge Status pada Tampilan Cetak */
+.badge-sesuai { color: #065f46; font-weight: bold; }
+.badge-selisih { color: #991b1b; font-weight: bold; text-transform: uppercase; }
+
         /* EDITOR STYLE */
         body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; padding-bottom: 50px; }
         .editor-card { background: #1e293b; border: 1px solid #334155; padding: 25px; border-radius: 12px; margin-bottom: 30px; }
@@ -26,7 +37,7 @@
         }
 
         .header-title { text-align: center; margin-bottom: 25px; }
-        .header-title h1 { font-size: 14pt; font-weight: bold; text-decoration: underline; text-transform: uppercase; margin: 0; }
+        .header-title h1 { font-size: 14pt; font-weight: bold; text-transform: uppercase; margin: 0; }
         .header-title h2 { font-size: 12pt; font-weight: bold; text-transform: uppercase; margin: 5px 0 0 0; }
 
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid black; }
@@ -51,7 +62,7 @@
 <div class="max-w-5xl mx-auto py-10 px-4 no-print">
     <div class="editor-card shadow-2xl">
         <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-6">
-            <h2 class="text-xl font-bold text-blue-400 uppercase">Laporan Form 12 VERVAL PUPUK BERSUBSIDI</h2>
+            <h2 class="text-xl font-bold text-blue-400 uppercase">Form 12 VERVAL PUPUK BERSUBSIDI</h2>
            
         </div>
         
@@ -132,9 +143,14 @@
             </div> </div>
         </div>
  <div class="flex gap-2">
-                <button onclick="generateAI()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase transition">AI Narasi</button>
-                <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase transition">Cetak ke PDF</button>
-            </div>
+    <button onclick="generateAI()" id="btn-ai" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase transition flex items-center">
+        <span id="loader" class="hidden mr-2"><i class="fa-solid fa-circle-notch animate-spin-custom"></i></span>
+        <span id="btn-text">✨ AI Narasi</span>
+    </button>
+    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase transition">
+        <i class="fa-solid fa-print mr-1"></i> Cetak ke PDF
+    </button>
+</div>
         <div class="mt-4">
             <label class="label-title text-blue-400">III. Narasi Permasalahan</label>
             <textarea id="in_tindak" rows="3" oninput="update()" class="input-field w-full h-24" placeholder="Klik AI untuk narasi..."></textarea>
@@ -267,35 +283,40 @@ function addRow() {
 }
 
 async function generateAI() {
-    // GANTI dengan URL Web App (GAS) Bapak yang sudah di-deploy
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzThkWQn-oIfmmQnIARJJuhL8h6kgt1JtDKP43xrJ7Axze6tQr4JHTXccc6cSy26QQFYw/exec"; 
-    
+    const btn = document.getElementById('btn-ai');
+    const loader = document.getElementById('loader');
+    const btnText = document.getElementById('btn-text');
+    const target = document.getElementById('in_tindak');
     const v3 = document.getElementById('in_v3').value;
     const wkpp = document.getElementById('in_wkpp').value || "wilayah binaan";
-    const target = document.getElementById('in_tindak');
 
-    target.value = "Sedang menyusun narasi laporan (via GAS)...";
+    // Start Loading
+    btn.disabled = true;
+    loader.classList.remove('hidden');
+    btn.classList.add('pulse-loading');
+    btnText.innerText = "MENYUSUN...";
 
-    // Menyusun prompt sesuai kebutuhan laporan PPL
-    const promptInput = `Tuliskan narasi formal singkat (maksimal 2 kalimat) untuk bagian "Permasalahan dan Tindak Lanjut" pada laporan verifikasi dan validasi distribusi pupuk subsidi (urea, NPK, dan organik). Hasil verifikasi adalah: ${v3}, berlokasi di ${wkpp}. Fokus pada penyaluran pupuk, kesesuaian data e-RDKK, dan pengecer. Gunakan bahasa Indonesia yang baku dan profesional.`;
+    const promptInput = `Tuliskan narasi formal singkat (2 kalimat) untuk bagian "Permasalahan dan Tindak Lanjut" laporan verval pupuk subsidi. Hasil verifikasi: ${v3}, lokasi: ${wkpp}. Fokus pada kepatuhan administrasi dan penyaluran di kios.`;
 
     try {
         const res = await fetch(WEB_APP_URL, {
             method: "POST",
             body: JSON.stringify({ prompt: promptInput }),
         });
-
         const d = await res.json();
-        
-        // Mengambil hasil teks dari respon Groq yang diteruskan oleh GAS
-        const narasi = d.choices?.[0]?.message?.content || "Tidak ada respon dari AI.";
+        const narasi = d.choices?.[0]?.message?.content || "Gagal menyusun narasi.";
         
         target.value = narasi.trim();
-        update(); // Sinkronkan ke tampilan cetak
-
+        update(); 
     } catch (e) {
-        console.error(e);
-        target.value = "Error: Pastikan Web App sudah di-deploy 'Anyone' dan URL benar.";
+        alert("Gagal terhubung ke AI. Periksa koneksi atau URL GAS.");
+    } finally {
+        // Stop Loading
+        btn.disabled = false;
+        loader.classList.add('hidden');
+        btn.classList.remove('pulse-loading');
+        btnText.innerText = "✨ AI Narasi";
     }
 }
 window.onload = update;
