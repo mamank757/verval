@@ -140,7 +140,6 @@
             <textarea id="in_tindak" rows="3" oninput="update()" class="input-field w-full h-24" placeholder="Klik AI untuk narasi..."></textarea>
         </div>
     </div>
-</div>
 
 <div id="doc-content">
     <div class="header-title">
@@ -268,47 +267,35 @@ function addRow() {
 }
 
 async function generateAI() {
-    const key = "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"; 
+    // GANTI dengan URL Web App (GAS) Bapak yang sudah di-deploy
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzThkWQn-oIfmmQnIARJJuhL8h6kgt1JtDKP43xrJ7Axze6tQr4JHTXccc6cSy26QQFYw/exec"; 
     
     const v3 = document.getElementById('in_v3').value;
     const wkpp = document.getElementById('in_wkpp').value || "wilayah binaan";
     const target = document.getElementById('in_tindak');
 
-    if(!key || key.length < 20) {
-        return alert("API Key tidak valid!");
-    }
+    target.value = "Sedang menyusun narasi laporan (via GAS)...";
 
-    target.value = "Sedang menyusun narasi laporan...";
+    // Menyusun prompt sesuai kebutuhan laporan PPL
+    const promptInput = `Tuliskan narasi formal singkat (maksimal 2 kalimat) untuk bagian "Permasalahan dan Tindak Lanjut" pada laporan verifikasi dan validasi distribusi pupuk subsidi (urea, NPK, dan organik). Hasil verifikasi adalah: ${v3}, berlokasi di ${wkpp}. Fokus pada penyaluran pupuk, kesesuaian data e-RDKK, dan pengecer. Gunakan bahasa Indonesia yang baku dan profesional.`;
 
     try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        const res = await fetch(WEB_APP_URL, {
             method: "POST",
-            headers: {
-                "Authorization": `Bearer ${key}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                model: "llama-3.1-8b-instant",
-                messages: [{
-                    role: "user",
-                   content: `Tuliskan narasi formal singkat (maksimal 2 kalimat) untuk bagian "Permasalahan dan Tindak Lanjut" pada laporan verifikasi dan validasi distribusi pupuk subsidi (urea, NPK, dan organik). Hasil verifikasi adalah: ${v3}, berlokasi di ${wkpp}. Fokus pada penyaluran pupuk, kesesuaian data e-RDKK, dan pengecer. Gunakan bahasa Indonesia yang baku dan profesional.`
-                }]
-            })
+            body: JSON.stringify({ prompt: promptInput }),
         });
 
-        if (!res.ok) {
-            const err = await res.text();
-            throw new Error(err);
-        }
-
         const d = await res.json();
+        
+        // Mengambil hasil teks dari respon Groq yang diteruskan oleh GAS
+        const narasi = d.choices?.[0]?.message?.content || "Tidak ada respon dari AI.";
+        
+        target.value = narasi.trim();
+        update(); // Sinkronkan ke tampilan cetak
 
-        target.value = d.choices?.[0]?.message?.content || "Tidak ada respon dari AI.";
-        update();
-
-    } catch(e) {
+    } catch (e) {
         console.error(e);
-        target.value = "Error: " + e.message;
+        target.value = "Error: Pastikan Web App sudah di-deploy 'Anyone' dan URL benar.";
     }
 }
 window.onload = update;
