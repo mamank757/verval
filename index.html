@@ -58,7 +58,42 @@
     </style>
 </head>
 <body>
+<div id="browser-warning" class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/90 backdrop-blur-md no-print p-4">
+    <div class="bg-slate-800 p-6 sm:p-8 rounded-3xl border border-emerald-500/50 max-w-md w-full max-h-[95vh] overflow-y-auto text-center shadow-2xl ring-1 ring-white/10 custom-scrollbar">
+        
+        <h3 class="text-xl font-bold text-white mb-4">Informasi Penggunaan</h3>
+        
+        <!-- Kontainer Gambar -->
+        <div class="mb-5 overflow-hidden">
+            <img src="https://raw.githubusercontent.com/mamank757/laporanbola/main/mamank.jpg" 
+                 alt="Panduan" 
+                 class="w-full h-auto max-h-64 object-contain rounded-2xl border border-white/10 shadow-lg bg-slate-900 mx-auto">
+        </div>
 
+        <div class="text-slate-300 mb-6 text-sm leading-relaxed space-y-4">
+            <div class="bg-emerald-500/10 p-4 rounded-xl border border-emerald-500/30 text-sm md:text-base text-emerald-50 text-left">
+                <p class="mb-2">
+                    <i class="fa-brands fa-tiktok mr-2 text-emerald-400"></i>
+                    Follow TikTok: <b>King Mamank</b>
+                </p>
+                <p class="mb-2">
+                    <i class="fa-brands fa-chrome mr-2 text-emerald-400"></i>
+                    Gunakan <b>Google Chrome</b>.
+                </p>
+                <p class="text-xs mt-3 pt-3 border-t border-emerald-500/20 opacity-80">
+                    <i class="fa-solid fa-circle-info mr-2"></i>
+                    Ada masalah, lapor: 081354871000
+                </p>
+            </div>
+        </div>
+
+        <button type="button" 
+                onclick="closeWarning()" 
+                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-2xl transition-all duration-300 active:scale-95 shadow-lg shadow-emerald-900/20 cursor-pointer uppercase tracking-wider text-sm">
+            Saya Sudah Membaca dan Mengerti
+        </button>
+    </div>
+</div>
 <div class="max-w-5xl mx-auto py-10 px-4 no-print">
     <div class="editor-card shadow-2xl">
         <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-6">
@@ -209,6 +244,11 @@
 </div>
 
 <script>
+    function closeWarning() {
+    const warning = document.getElementById('browser-warning');
+    if(warning) warning.style.display = 'none';
+}
+
 function loadSig(e) {
     const r = new FileReader();
     r.onload = () => { const o = document.getElementById('sig-preview'); o.src = r.result; o.style.display = 'block'; };
